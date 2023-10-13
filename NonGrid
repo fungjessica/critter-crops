@@ -4,19 +4,44 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
+    //can adjust how fast we want the character to be
+    public float speed;
+    //connect to animator 
+    public Animator animator;
 
-    public Vector2 speed = new Vector2(25, 25);
+    //vector of movement 
+    private Vector3 direction;
 
     // Update is called once per frame
     void Update()
     {
-        float inputX = Input.GetAxis("Horizontal");
-        float inputY = Input.GetAxis("Vertical");
+        float inputX = Input.GetAxisRaw("Horizontal");
+        float inputY = Input.GetAxisRaw("Vertical");
 
-        Vector3 movement = new Vector3(speed.x * inputX, speed.y * inputY, 0);
+        direction = new Vector3(speed * inputX, speed * inputY, 0);
 
-        movement *= Time.deltaTime;
+        AnimateMovement(direction);
+    }
+    private void FixedUpdate() 
+    {
+         this.transform.position += movement.normalized * speed * Time.deltaTime;
+    }
+    void AnimateMovement(Vector3 direction) 
+    {
+        if(animator != null) 
+        {
+            if(movement.magnitude > 0)
+            {
+                animator.SetBool("isMoving", true);
 
-        transform.Translate(movement);
+                animator.SetFloat("horizontal", direction.x);
+                animator.SetFloat("vertical", direction.y);
+            }
+            else
+            {
+                animator.SetBool("isMoving", false);
+            }
+
+        }
     }
 }
