@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public GameObject player;
-    private Vector3 offset;
+    public GameObject player; //create game object for player so camera knows who to follow
+    private Vector3 offset; //movement vector
 
     // Start is called before the first frame update
     void Start()
     {
-        offset = transform.position - player.transform.position;
+        offset = transform.position - player.transform.position; //vector adjustments due to players starting position in game screen
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        transform.position = player.transform.position + offset;
+        transform.position = player.transform.position + offset; //updates to players current position in game screen from the starting position
     }
 }
