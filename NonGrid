@@ -5,18 +5,18 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
 
-    public Vector2 speed = new Vector2(25, 25);
+    public Vector2 speed = new Vector2(25, 25); //adjustable player speed
 
     // Update is called once per frame
     void Update()
     {
-        float inputX = Input.GetAxis("Horizontal");
-        float inputY = Input.GetAxis("Vertical");
+        float inputX = Input.GetAxis("Horizontal"); //new input if player is moving left or right
+        float inputY = Input.GetAxis("Vertical"); //new input if player is moving up or down
 
-        Vector3 movement = new Vector3(speed.x * inputX, speed.y * inputY, 0);
+        Vector3 movement = new Vector3(speed.x * inputX, speed.y * inputY, 0); //multiply all factors together
 
-        movement *= Time.deltaTime;
+        movement *= Time.deltaTime; //multiply again for framerate
 
-        transform.Translate(movement);
+        transform.Translate(movement); //player moves based on movement attribute
     }
 }
