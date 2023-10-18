@@ -1,0 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CustomCursor : MonoBehaviour
+{
+    public Texture2D cursor; //texture 2d, not a regular sprite
+    // Start is called before the first frame update
+    void Start() //want cursor from the beginning
+    {
+        Vector2 cursorOffSet = new Vector2(cursor.width/2, cursor.height/2); //adjustable cursor height and width
+        Cursor.SetCursor(cursor, cursorOffSet, CursorMode.Auto); //sets the texture to the mouse
+    }
+
+    
+}
