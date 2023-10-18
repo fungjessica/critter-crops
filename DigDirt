@@ -1,0 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class DirtDig : MonoBehaviour
+{
+    public Tilemap baseTile; //base tile map (dirt tilemap)
+    //public TileBase dirtHole;
+    public Tile holeTile; //hole tile sprite 
+   
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+        if(Input.GetMouseButtonDown(0)){ //left click
+            Debug.Log("mouse click"); //debug to make sure click works
+
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); //gets mouse position in game screen
+            Vector3Int cellPosition = baseTile.WorldToCell(mousePosition); //gets cell position thats in the tilemap at mouse position
+
+            //BaseDirt checkDirt = baseTile.GetTile<BaseDirt>(cellPosition);
+            TileBase tile = baseTile.GetTile(cellPosition); //new TileBase to get the tile in the position
+
+            if(tile != null){ 
+                baseTile.SetTile(cellPosition, holeTile); //changes from the tilemap tile to hole sprite
+                Debug.Log("click"); //debug to make sure it works
+            }
+            
+        }
+    }
+}
