@@ -2,8 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//add this component to player gameObject
 public class Player : MonoBehaviour
 {
-    
+   public Inventory inventory;
+
+   private void Awake() 
+   {
+    inventory = new Inventory(15);
+   }
+   public void DropItem(Collectable item) 
+   {
+      Vector2 spawnLocation = transform.position;
+
+      Vector2 spawnOffset = Random.insideUnitCircle * 2f;
+
+      Collectable droppedItem = Instantiate(item, spawnLocation + spawnOffset, Quaternion.identity);   
+   
+      droppedItem.rb2d.AddForce(spawnOffset *.3f, ForceMode2D.Impulse);
+   }
 }
