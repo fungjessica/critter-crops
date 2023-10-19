@@ -1,0 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+//add this component to player gameObject
+public class Player : MonoBehaviour
+{
+    
+}
