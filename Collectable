@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+//add this to all items that can be picked up
+public class Collectable : MonoBehaviour
+{
+    public CollectableType type;
+    public Sprite icon;
+    
+    public Rigidbody2D rb2d;
+
+    public void Awake()
+    {
+        rb2d = GetComponent<Rigidbody2D>();
+    }
+    //When player walks into collectable add to inventory
+    //remove collectable from screen
+    private void OnTriggerEnter2D(Collider2D collision) {
+        Player player = collision.GetComponent<Player>();
+        if (player) 
+        {
+        //    player.inventory.Add(this);
+            Destroy(this.gameObject);
+        }
+    }
+}
+public enum CollectableType {
+    NONE, RADISH
+}
