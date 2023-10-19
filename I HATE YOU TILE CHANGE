@@ -1,0 +1,43 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class TileChange : MonoBehaviour
+{
+    public Tilemap dirtTilemap; //yes i split up the tilemaps stfu pls
+    public Tilemap grassTilemap;
+    public Tile grassTile; //tiles
+    public Tile dirtTile;
+    public Tile holeTile;
+    
+    public float dirtRadius = 64.0f; // radius for player interaction ik its huge
+
+    private bool isFarming; //for animator
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int cellPosition = dirtTilemap.WorldToCell(mousePosition);
+
+            TileBase grassTileB = grassTilemap.GetTile(cellPosition); 
+            TileBase dirtTileB = dirtTilemap.GetTile(cellPosition);
+
+            if (grassTileB != null) //the problem is here >:(
+            {
+                isFarming = true;
+                grassTilemap.SetTile(cellPosition, dirtTile);
+            }
+            else if(dirtTileB != null)
+            {
+                if(dirtTileB == dirtTile){ //mayhaps i shall remove this
+                    dirtTilemap.SetTile(cellPosition, holeTile);
+
+                }
+                
+            }
+        }
+    }
+}
