@@ -5,36 +5,40 @@ using UnityEngine.Tilemaps;
 
 public class TileChange : MonoBehaviour
 {
-    public Tilemap dirtTilemap; //yes i split up the tilemaps stfu pls
-    public Tilemap grassTilemap;
-    public Tile grassTile; //tiles
-    public Tile dirtTile;
-    public Tile holeTile;
-    
-    public float dirtRadius = 64.0f; // radius for player interaction ik its huge
-
-    private bool isFarming; //for animator
+    public Tilemap tilemap;
+    public Tile[] interactableTiles;
+    public Tile[] replacementTiles;
+    public float tileRadius = 4.0f;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3Int cellPosition = dirtTilemap.WorldToCell(mousePosition);
+            mousePosition.z = 0;
+            Vector3Int cellPosition = tilemap.WorldToCell(mousePosition);
+            TileBase clickedTile = tilemap.GetTile(cellPosition);
 
-            TileBase grassTileB = grassTilemap.GetTile(cellPosition); 
-            TileBase dirtTileB = dirtTilemap.GetTile(cellPosition);
-
-            if (grassTileB != null) //the problem is here >:(
+            for (int i = 0; i < interactableTiles.Length; i++)
             {
-                isFarming = true;
-                grassTilemap.SetTile(cellPosition, dirtTile);
-            }
-            else if(dirtTileB != null)
-            {
-                if(dirtTileB == dirtTile){ //mayhaps i shall remove this
-                    dirtTilemap.SetTile(cellPosition, holeTile);
+                Debug.Log("FL debug");
+                if(clickedTile == interactableTiles[i]){
+                    Vector3 playerPosition = transform.position;
+                    float distance = Vector3.Distance(playerPosition, mousePosition);
+                    Debug.Log("pos: " + distance);
+                    Debug.Log("mos: " + mousePosition);
 
+                    if (distance <= tileRadius)
+                    {
+                        Debug.Log("first if debug");
+                        if (i < replacementTiles.Length)
+                        {
+                            Debug.Log("second if debug");
+                            tilemap.SetTile(cellPosition, replacementTiles[i]);
+                        }
+                    
+                    }
+                    break;
                 }
                 
             }
