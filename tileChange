@@ -1,0 +1,47 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class TileChange : MonoBehaviour
+{
+    public Tilemap tilemap;
+    public Tile[] interactableTiles;
+    public Tile[] replacementTiles;
+    public float tileRadius = 4.0f;
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePosition.z = 0;
+            Vector3Int cellPosition = tilemap.WorldToCell(mousePosition);
+            TileBase clickedTile = tilemap.GetTile(cellPosition);
+
+            for (int i = 0; i < interactableTiles.Length; i++)
+            {
+                //Debug.Log("FL debug");
+                if(clickedTile == interactableTiles[i]){
+                    Vector3 playerPosition = transform.position;
+                    float distance = Vector3.Distance(playerPosition, mousePosition);
+                    //Debug.Log("pos: " + distance);
+                    //Debug.Log("mos: " + mousePosition);
+
+                    if (distance <= tileRadius)
+                    {
+                        //Debug.Log("first if debug");
+                        if (i < replacementTiles.Length)
+                        {
+                            //Debug.Log("second if debug");
+                            tilemap.SetTile(cellPosition, replacementTiles[i]);
+                        }
+                    
+                    }
+                    break;
+                }
+                
+            }
+        }
+    }
+}
