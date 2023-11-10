@@ -1,0 +1,52 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class Soaky : MonoBehaviour
+{
+    public float moveSpeed = 2.0f;
+    public Vector2 minPosition;
+    public Vector2 maxPosition;
+
+    private Vector3 targetPosition;
+    public bool isWalking = false;
+    public bool isIdle;
+
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
+    private Vector3 originalScale;
+
+    void Start(){
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalScale = transform.localScale;
+        SetNewRandomTargetPosition();
+
+    }
+    void Update(){
+        MoveTowardsTarget();
+
+        if(Vector3.Distance(transform.position, targetPosition) < 0.1f){
+            SetNewRandomTargetPosition();
+        }
+    }
+    void SetNewRandomTargetPosition(){
+        float randomX = Random.Range(-8f, 8f);
+        float randomY = Random.Range(-4.5f, 4.5f);
+
+        targetPosition = new Vector3(randomX, randomY, transform.position.z);
+        if(randomX < transform.position.x){
+            transform.localScale = originalScale;
+            spriteRenderer.flipX = true;
+        }else{
+            transform.localScale = originalScale;
+            spriteRenderer.flipX = false;
+        }
+    }
+    void MoveTowardsTarget(){
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        animator.SetBool("isWalking", true);
+        animator.SetBool("isIdle", false);
+    }
+}
