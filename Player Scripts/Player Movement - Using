@@ -2,21 +2,70 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControl : MonoBehaviour
+public class NonGrid : MonoBehaviour
 {
+    // Can adjust how fast we want the character to be
+    public float speed;
 
-    public Vector2 speed = new Vector2(25, 25); //adjustable player speed
+    // Connect to animator 
+    public Animator animator;
+
+    // Vector of movement 
+    private Vector3 direction;
+
+    // Reference to the sprite renderer
+    private SpriteRenderer spriteRenderer;
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        float inputX = Input.GetAxis("Horizontal"); //new input if player is moving left or right
-        float inputY = Input.GetAxis("Vertical"); //new input if player is moving up or down
+        float inputX = Input.GetAxisRaw("Horizontal");
+        float inputY = Input.GetAxisRaw("Vertical");
 
-        Vector3 movement = new Vector3(speed.x * inputX, speed.y * inputY, 0); //multiply all factors together
+        direction = new Vector3(inputX, inputY, 0);
 
-        movement *= Time.deltaTime; //multiply again for framerate
+        AnimateMovement(direction);
+    }
 
-        transform.Translate(movement); //player moves based on movement attribute
+    private void FixedUpdate()
+    {
+        // Move the player
+        transform.position += direction.normalized * speed * Time.deltaTime;
+    }
+
+    private void Awake()
+    {
+        // Get the sprite renderer component
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    private void AnimateMovement(Vector3 direction)
+    {
+        if (animator != null)
+        {
+            if (direction.magnitude > 0)
+            {
+                animator.SetBool("isMoving", true);
+
+                animator.SetFloat("horizontal", direction.x);
+                animator.SetFloat("vertical", direction.y);
+            }
+            else
+            {
+                animator.SetBool("isMoving", false);
+            }
+        }
+
+        // Check if the player is moving to the right and flip the sprite if so
+        if (direction.x > 0)
+        {
+            // Flip the sprite horizontally
+            spriteRenderer.flipX = true;
+        }
+        else if (direction.x < 0)
+        {
+            // Flip the sprite back to its original direction
+            spriteRenderer.flipX = false;
+        }
     }
 }
