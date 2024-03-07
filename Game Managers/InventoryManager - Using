@@ -1,0 +1,86 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class InventoryManager : MonoBehaviour
+{
+    public Sprite currentlyHeldSeed;
+    public void SetCurrentlyHeldSeed(Sprite seed){
+        currentlyHeldSeed = seed;
+    }
+    public Dictionary<string, Inventory> inventoryByName = new Dictionary<string, Inventory>();
+
+    [Header("Backpack")]
+    public Inventory backpack;
+    public int backpackSlotCount;
+
+    [Header("Toolbar")]
+    public Inventory toolbar;
+    public int toolbarSlotCount;
+
+    private PlantManager plantManager; // Reference to the PlantManager script
+
+    private void Awake() 
+    {
+        backpack = new Inventory(backpackSlotCount);
+        toolbar = new Inventory(toolbarSlotCount);
+
+        inventoryByName.Add("Backpack", backpack);
+        inventoryByName.Add("Toolbar", toolbar);
+
+        // Find and store the reference to the PlantManager script
+        plantManager = FindObjectOfType<PlantManager>();
+        if (plantManager == null)
+        {
+            Debug.LogError("PlantManager not found in the scene!");
+        }
+    }
+
+    public void Add(string inventoryName, Item item)
+    {
+        if(inventoryByName.ContainsKey(inventoryName))
+        {
+            inventoryByName[inventoryName].Add(item);
+        }
+    }
+
+    public Inventory GetInventoryByName(string inventoryName)
+    {
+        if(inventoryByName.ContainsKey(inventoryName))
+        {
+            return inventoryByName[inventoryName];
+        }
+        return null;
+    }
+
+    // Example method to access plant sprites and tiles from PlantManager
+    public Sprite GetPlantSprite(int plantNumber)
+    {
+        if (plantManager != null && plantManager.plantSprites.ContainsKey(plantNumber))
+        {
+            Debug.Log("plant seed match");
+            return plantManager.plantSprites[plantNumber];
+            
+        }
+        else
+        {
+            Debug.LogWarning("Plant sprite for plant number " + plantNumber + " not found!");
+            return null;
+        }
+    }
+
+    public TileBase GetPlantTile(int plantNumber)
+    {
+        if (plantManager != null && plantManager.plantTiles.ContainsKey(plantNumber))
+        {
+            Debug.Log("plant tile match");
+            return plantManager.plantTiles[plantNumber];
+            
+        }
+        else
+        {
+            Debug.LogWarning("Plant tile for plant number " + plantNumber + " not found!");
+            return null;
+        }
+    }
+}
