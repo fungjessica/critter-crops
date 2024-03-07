@@ -1,0 +1,38 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class PlantSeed : MonoBehaviour
+{
+    public Tilemap tilemap;
+    public PlantManager plantManager;
+
+    private void Start()
+    {
+        plantManager = PlantManager.Instance;
+        if (plantManager == null)
+        {
+            Debug.LogError("PlantManager instance not found.");
+        }
+    }
+
+    public void PlantSeedOnTile()
+    {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0;
+        Vector3Int cellPosition = tilemap.WorldToCell(mousePosition);
+        TileBase clickedTile = tilemap.GetTile(cellPosition);
+        
+        // Access plant data from PlantManager
+        if (plantManager != null && plantManager.plantSprites.ContainsKey(1) && plantManager.plantTiles.ContainsKey(1))
+        {
+            Debug.Log("player interacted with tile");
+            // Change the tile to its respective planted seed tile based on the selected plant
+            tilemap.SetTile(cellPosition, plantManager.plantTiles[1]);
+        }
+        else
+        {
+            Debug.LogWarning("Plant data not found for the specified plant number.");
+        }
+    }
+}
