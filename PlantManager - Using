@@ -1,0 +1,38 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class PlantManager : MonoBehaviour
+{
+    // Singleton pattern to ensure there's only one instance of PlantManager
+    public static PlantManager Instance;
+
+    public Dictionary<int, Sprite> plantSprites = new Dictionary<int, Sprite>(); // Mapping of plant number to sprite
+    public Dictionary<int, TileBase> plantTiles = new Dictionary<int, TileBase>(); // Mapping of plant number to tile
+
+    public Sprite plant1Sprite;
+    public Sprite plant2Sprite;
+
+    public Tile plant1Tile;
+    public Tile plant2Tile;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogWarning("More than one PlantManager instance found in the scene. Make sure to only have one PlantManager.");
+            Destroy(gameObject);
+        }
+
+        // Assign plant sprites and tiles to the dictionaries
+        plantSprites.Add(1, plant1Sprite);
+        plantSprites.Add(2, plant2Sprite);
+
+        plantTiles.Add(1, plant1Tile);
+        plantTiles.Add(2, plant2Tile);
+    }
+}
