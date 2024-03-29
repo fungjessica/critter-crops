@@ -6,6 +6,7 @@ public class PlantSeed : MonoBehaviour
 {
     public Tilemap tilemap;
     public PlantManager plantManager;
+    public InventoryManager inventory;
 
     private void Start()
     {
@@ -16,7 +17,7 @@ public class PlantSeed : MonoBehaviour
         }
     }
 
-    public void PlantSeedOnTile()
+    public void PlantSeedOnTile(int number)
     {
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0;
@@ -24,12 +25,13 @@ public class PlantSeed : MonoBehaviour
         TileBase clickedTile = tilemap.GetTile(cellPosition);
         
         // Access plant data from PlantManager
-        if (plantManager != null && plantManager.plantSprites.ContainsKey(1) && plantManager.plantTiles.ContainsKey(1))
+        if (plantManager != null && plantManager.plantSprites.ContainsKey(number) && plantManager.plantTiles.ContainsKey(number))
         {
             Debug.Log("player interacted with tile");
             // Change the tile to its respective planted seed tile based on the selected plant
-            tilemap.SetTile(cellPosition, plantManager.plantTiles[1]);
+            tilemap.SetTile(cellPosition, plantManager.plantTiles[number]);
         }
+        
         else
         {
             Debug.LogWarning("Plant data not found for the specified plant number.");
