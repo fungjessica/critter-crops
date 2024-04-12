@@ -36,3 +36,7 @@ public class PlantManager : MonoBehaviour
         plantTiles.Add(2, plant2Tile);
     }
 }
+
+//once land plant growth reaches sprout stage, needs EITHER soaky to water it, or player manually water the plant 
+//once fruit plants growth reaches flowering stage, needs EITHER fire cat to sunbeam it, or plant takes DOUBLE time to grow 
+//reduce growth time by half
